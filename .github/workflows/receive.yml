@@ -1,0 +1,40 @@
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out infrastructure-live
+        uses: actions/checkout@v3
+        with:
+          repository: FulcrumOps/action-trigger-infra-live
+          path: infrastructure-live
+          token: "${{ secrets.INFRA_LIVE_SECRET }}"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.3
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        working-directory: infrastructure-live
+        continue-on-error: true
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules
+, etc.
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: infrastructure-live
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        working-directory: infrastructure-live

@@ -15,7 +15,7 @@ jobs:
         with:
           repository: FulcrumOps/action-trigger-infra-live
           path: infrastructure-live
-          token: "${{ secrets.INFRA_LIVE_SECRET }}"
+          token: "${{ secrets.INFRA_PIPELINE_SECRET }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
